@@ -1,14 +1,27 @@
 #include <Arduino.h>
 
+/*
+   sensor array:
+   A0 thru A5 - sensors 2 thru 6
+   
+
+*/
+
 void setup() {
   // put your setup code here, to run once:
-  pinMode(LED_BUILTIN, OUTPUT);
+
+  // initialzes all analog pins for input
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
+  pinMode(A3, INPUT);
+  pinMode(A4, INPUT);
+  pinMode(A5, INPUT);
+
+  pinMode(LED_BULITIN, OUTPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(1000);
+  
 }
