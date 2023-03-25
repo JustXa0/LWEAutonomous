@@ -3,8 +3,8 @@
 #include <SPI.h>
 
 Adafruit_MotorShield motorShield = Adafruit_MotorShield();
-Adafruit_DCMotor leftMotor = Adafruit_DCMotor();
-Adafruit_DCMotor rightMotor = Adafruit_DCMotor();
+Adafruit_DCMotor *leftMotor = motorShield.getMotor(1);
+Adafruit_DCMotor *rightMotor = motorShield.getMotor(2);
 
 
 
@@ -14,8 +14,8 @@ void setup() {
 
   
   motorShield.begin();
-  leftMotor.setSpeed(150);
-  rightMotor.setSpeed(150);
+  leftMotor->setSpeed(150);
+  rightMotor->setSpeed(150);
   
 
   pinMode(LED_BUILTIN, OUTPUT);
@@ -25,14 +25,14 @@ void loop() {
   // put your main code here, to run repeatedly:
   
 
-  rightMotor.fullOn();
-  leftMotor.fullOn();
-  leftMotor.run(FORWARD);
+  rightMotor->fullOn();
+  leftMotor->fullOn();
+  leftMotor->run(FORWARD);
   delay(1000);
-  leftMotor.fullOff();
-  rightMotor.run(FORWARD);
+  leftMotor->fullOff();
+  rightMotor->run(FORWARD);
   delay(1000);
-  rightMotor.fullOff();
+  rightMotor->fullOff();
 }
 
 void move(Adafruit_DCMotor motorName, Adafruit_DCMotor motorName2) {
