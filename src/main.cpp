@@ -18,7 +18,9 @@ void readSensors();
 void moveForward();
 void moveBackward();
 void turnLeft(int degree);
+void turnLeft();
 void turnRight(int degree);
+void turnRight();
 void stop(AF_DCMotor motor);
 void stop();
 
@@ -42,10 +44,10 @@ void loop() {
   delay(20);
 
   if(((sensorValues[2] < 900) && (sensorValues[3] < 900))) {
-    moveBackward();
+    moveForward();
   }
   else {
-    moveForward();
+    moveBackward();
     delay(200);
   }
 
@@ -121,4 +123,14 @@ void stop(AF_DCMotor motor) {
 void stop() {
   leftMotor.run(RELEASE);
   rightMotor.run(RELEASE);
+}
+
+void turnLeft() {
+  leftMotor.run(FORWARD);
+  rightMotor.run(BACKWARD);
+}
+
+void turnRight() {
+  rightMotor.run(FORWARD);
+  leftMotor.run(BACKWARD);
 }
