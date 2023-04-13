@@ -4,7 +4,6 @@
 
 #define WHEEL_DIAMETER 3.7
 #define WHEEL_BASE 20
-#define PI 3.1415926
 
 
 
@@ -13,18 +12,21 @@ AF_DCMotor leftMotor(3, MOTOR12_1KHZ); // creates a motor object with a 1KHZ PWM
 AF_DCMotor rightMotor(4, MOTOR12_1KHZ); // creates a motor object with a 1KHZ PWM frequency
 
 QTRSensors qtr;
+uint16_t sensorValues[6];
 
-int[] readSensors();
+void readSensors();
 void moveForward();
 void moveBackward();
 void turnLeft(int degree);
 void turnRight(int degree);
+void stop(AF_DCMotor motor);
 void stop();
 
 
 
 void setup() {
   // put your setup code here, to run once:
+  
   qtr.setTypeAnalog();
   qtr.setSensorPins((const uint8_t[]){A0, A1, A2, A3, A4, A5}, 6);
   motorShield.enable();
@@ -35,8 +37,18 @@ void setup() {
 } 
 
 void loop() {
-  int[] positions = new int[6];
-  positions = readSensors();
+  readSensors();
+  //Serial.println(sensorValues[1]);
+  delay(20);
+
+  if(((sensorValues[2] < 900) && (sensorValues[3] < 900))) {
+    moveBackward();
+  }
+  else {
+    moveForward();
+    delay(200);
+  }
+
 
   //moveForward();
   //turnRight(180);
@@ -82,7 +94,7 @@ void turnRight(int degree) {
   for(double i = 0.0; i <= (revolutions * 255); i += .1) {
     rightMotor.run(FORWARD);
   }
-  //stop(rightMotor);
+  stop(rightMotor);
 }
   void turnLeft(int degree) {
     double distance = degree * (WHEEL_BASE / 2.0);
@@ -90,15 +102,23 @@ void turnRight(int degree) {
   for(double i = 0.0; i <= (revolutions * 255); i += .1) {
     leftMotor.run(FORWARD);
   }
-  //stop(leftMotor);
+  stop(leftMotor);
 }
 
-int[] readSensors() {
-  uint16_t sensors[6];
-  int[6] sensorValues = qtr.read(sensors);
-  return sensorValues;
+void readSensors() {
+  qtr.read(sensorValues);
+  for(uint8_t i = 0; i < 6; i++) {
+    Serial.print(sensorValues[i]);
+    Serial.print('\t');
+  }
+  Serial.println();
 }
 
 void stop(AF_DCMotor motor) {
   motor.run(RELEASE);
+}
+
+void stop() {
+  leftMotor.run(RELEASE);
+  rightMotor.run(RELEASE);
 }
