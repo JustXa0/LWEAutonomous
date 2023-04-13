@@ -5,16 +5,16 @@
 
 
 AFMotorController motorShield = AFMotorController();
-AF_DCMotor leftMotor(3, MOTOR12_64KHZ);
-AF_DCMotor rightMotor(4, MOTOR12_64KHZ);
+AF_DCMotor leftMotor(3, MOTOR12_1KHZ);
+AF_DCMotor rightMotor(4, MOTOR12_1KHZ);
 
 QTRSensors qtr;
 
 void readSensors();
 void moveForward();
 void moveBackward();
-void turnLeft();
-void turnRight();
+void turnLeft(int degree);
+void turnRight(int degree);
 
 
 
@@ -26,15 +26,17 @@ void setup() {
   motorShield.enable();
   leftMotor.setSpeed(255);
   rightMotor.setSpeed(255);
+  Serial.begin(9600);
 } 
 
 void loop() {
   //readSensors();
 
-  moveForward();
+  //moveForward();
+  turnRight(180);
 }
 
-void readSensors() {
+/*void readSensors() {
   uint16_t sensors[6];
   uint16_t position = qtr.readLineWhite(sensors);
 
@@ -55,6 +57,7 @@ void readSensors() {
   }
 
 }
+*/
 
 void moveForward() {
   rightMotor.run(FORWARD);
@@ -66,13 +69,13 @@ void moveBackward() {
   leftMotor.run(BACKWARD);
   }
 
-void turnRight() {
+void turnRight(int degree) {
   for(int i = 0; i < 250; i++) {
     rightMotor.run(BACKWARD);
     leftMotor.run(FORWARD);
   }
 }
-  void turnLeft() {
+  void turnLeft(int degree) {
     for(int i = 0; i < 250; i++) {
       rightMotor.run(FORWARD);
       leftMotor.run(BACKWARD);
