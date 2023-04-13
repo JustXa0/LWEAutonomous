@@ -1,21 +1,25 @@
-#include <Arduino.h>
-#include <AFMotor.h>
-#include <QTRSensors.h>
-#include <SPI.h>
+#include <Arduino.h> // include the arduino library
+#include <AFMotor.h> // include the motor shield library
+#include <QTRSensors.h> // include the line sensor array library
+
+#define WHEEL_DIAMETER 3.7
+#define WHEEL_BASE 20
+#define PI 3.1415926
 
 
-AFMotorController motorShield = AFMotorController();
-AF_DCMotor leftMotor(3, MOTOR12_1KHZ);
-AF_DCMotor rightMotor(4, MOTOR12_1KHZ);
+
+AFMotorController motorShield = AFMotorController(); // creates a motor controller object
+AF_DCMotor leftMotor(3, MOTOR12_1KHZ); // creates a motor object with a 1KHZ PWM frequency
+AF_DCMotor rightMotor(4, MOTOR12_1KHZ); // creates a motor object with a 1KHZ PWM frequency
 
 QTRSensors qtr;
 
-void readSensors();
+int[] readSensors();
 void moveForward();
 void moveBackward();
 void turnLeft(int degree);
 void turnRight(int degree);
-
+void stop();
 
 
 
@@ -27,13 +31,16 @@ void setup() {
   leftMotor.setSpeed(255);
   rightMotor.setSpeed(255);
   Serial.begin(9600);
+  delay(2000);
 } 
 
 void loop() {
-  //readSensors();
+  int[] positions = new int[6];
+  positions = readSensors();
 
   //moveForward();
-  turnRight(180);
+  //turnRight(180);
+  //turnLeft(180);
 }
 
 /*void readSensors() {
@@ -70,14 +77,28 @@ void moveBackward() {
   }
 
 void turnRight(int degree) {
-  for(int i = 0; i < 250; i++) {
-    rightMotor.run(BACKWARD);
-    leftMotor.run(FORWARD);
+  double distance = degree * (WHEEL_BASE / 2.0);
+  double revolutions = distance / (WHEEL_DIAMETER * PI);
+  for(double i = 0.0; i <= (revolutions * 255); i += .1) {
+    rightMotor.run(FORWARD);
   }
+  //stop(rightMotor);
 }
   void turnLeft(int degree) {
-    for(int i = 0; i < 250; i++) {
-      rightMotor.run(FORWARD);
-      leftMotor.run(BACKWARD);
-    }
+    double distance = degree * (WHEEL_BASE / 2.0);
+  double revolutions = distance / (WHEEL_DIAMETER * PI);
+  for(double i = 0.0; i <= (revolutions * 255); i += .1) {
+    leftMotor.run(FORWARD);
+  }
+  //stop(leftMotor);
+}
+
+int[] readSensors() {
+  uint16_t sensors[6];
+  int[6] sensorValues = qtr.read(sensors);
+  return sensorValues;
+}
+
+void stop(AF_DCMotor motor) {
+  motor.run(RELEASE);
 }
