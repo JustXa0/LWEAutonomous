@@ -5,8 +5,8 @@
 
 
 AFMotorController motorShield = AFMotorController();
-AF_DCMotor leftMotor(1, MOTOR12_2KHZ);
-AF_DCMotor rightMotor(2, MOTOR12_2KHZ);
+AF_DCMotor leftMotor(3, MOTOR12_64KHZ);
+AF_DCMotor rightMotor(4, MOTOR12_64KHZ);
 
 QTRSensors qtr;
 
