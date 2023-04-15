@@ -41,19 +41,76 @@ void setup() {
 void loop() {
   readSensors();
   //Serial.println(sensorValues[1]);
-  delay(20);
 
-  if(((sensorValues[2] < 900) && (sensorValues[3] < 900))) {
+  if ((sensorValues[1] > 900) && ((sensorValues[3] < 900) || (sensorValues[4] < 900)) && (sensorValues[6] > 900))
     moveForward();
-  }
-  else {
+
+  if((sensorValues[1] < 900) && ((sensorValues[3] > 900) || (sensorValues[4] > 900)) && (sensorValues[6] > 900))
+    turnLeft();
+
+  if((sensorValues[1] > 900) && ((sensorValues[3] > 900) || (sensorValues[4] > 900)) && (sensorValues[6] < 900))
+    turnRight();
+  
+  if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
     moveBackward();
-    delay(200);
-  }
+
+   //delay(20);
+  //if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
+  //  moveBackward();
+
+  // if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900)) {
+  //   moveBackward();
+  // } else {
+  //   if((sensorValues[1] < 900) && (sensorValues[3] < 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
+  //   {
+  //     turnRight();
+  //     delay(80);
+  //   } 
+  //   else if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] < 900) && (sensorValues[5] < 900) && (sensorValues[6] < 900)) {
+  //     turnLeft();
+  //     delay(80);
+  //   }
+  //   else if ((sensorValues[3] < 900) && (sensorValues[4] < 900))
+  //   {
+  //     moveForward();
+  //     delay(120);
+  //   }
+  // }
+
+  // if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900)) {
+  //   moveBackward();
+  //   delay(80);
+  // } else {
+  //   moveForward();
+  //   delay(100);
+  //   if((sensorValues[1] < 900) && (sensorValues[2] < 900) && (sensorValues[3] < 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
+  //   {
+  //     turnRight();
+  //     delay(80);
+  //   } 
+  //   else if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] < 900) && (sensorValues[5] < 900) && (sensorValues[6] < 900)) {
+  //     turnLeft();
+  //     delay(80);
+  //   }
+  //   else if ((sensorValues[3] < 900) && (sensorValues[4] < 900))
+  //   {
+  //     moveForward();
+  //     delay(120);
+  //   }
+  // }
+
+  // if(((sensorValues[2] < 900) && (sensorValues[3] < 900))) {
+  //  moveForward();
+  // }
+  // else {
+  //  turnRight();
+  //  delay(200);
+  // }
 
 
   //moveForward();
-  //turnRight(180);
+  //delay(20);
+  //turnRight();
   //turnLeft(180);
 }
 
@@ -98,8 +155,9 @@ void turnRight(int degree) {
   }
   stop(rightMotor);
 }
-  void turnLeft(int degree) {
-    double distance = degree * (WHEEL_BASE / 2.0);
+
+void turnLeft(int degree) {
+  double distance = degree * (WHEEL_BASE / 2.0);
   double revolutions = distance / (WHEEL_DIAMETER * PI);
   for(double i = 0.0; i <= (revolutions * 255); i += .1) {
     leftMotor.run(FORWARD);
