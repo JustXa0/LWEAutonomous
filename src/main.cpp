@@ -23,6 +23,9 @@ void turnRight(int degree);
 void turnRight();
 void stop(AF_DCMotor motor);
 void stop();
+boolean lineLeft;
+boolean lineRight;
+boolean lineCenter;
 
 
 
@@ -38,111 +41,68 @@ void setup() {
   delay(2000);
 } 
 
-void loop() {
+void loop() 
+{
   readSensors();
   //Serial.println(sensorValues[1]);
 
-  if ((sensorValues[1] > 900) && ((sensorValues[3] < 900) || (sensorValues[4] < 900)) && (sensorValues[6] > 900))
+
+/*
+  if ((sensorValues[0] > 900) && ((sensorValues[2] < 900) || (sensorValues[3] < 900)) && (sensorValues[5] > 900))
     moveForward();
 
-  if((sensorValues[1] < 900) && ((sensorValues[3] > 900) || (sensorValues[4] > 900)) && (sensorValues[6] > 900))
+  else if((sensorValues[0] < 940) && ((sensorValues[2] > 900) || (sensorValues[3] > 900)) && (sensorValues[5] > 900))
     turnLeft();
 
-  if((sensorValues[1] > 900) && ((sensorValues[3] > 900) || (sensorValues[4] > 900)) && (sensorValues[6] < 900))
+  else if((sensorValues[0] > 900) && ((sensorValues[2] > 900) || (sensorValues[3] > 900)) && (sensorValues[5] < 940))
     turnRight();
   
-  if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
+  else if((sensorValues[0] > 900) && (sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900))
     moveBackward();
+*/
 
-   //delay(20);
-  //if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
-  //  moveBackward();
-
-  // if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900)) {
-  //   moveBackward();
-  // } else {
-  //   if((sensorValues[1] < 900) && (sensorValues[3] < 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
-  //   {
-  //     turnRight();
-  //     delay(80);
-  //   } 
-  //   else if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] < 900) && (sensorValues[5] < 900) && (sensorValues[6] < 900)) {
-  //     turnLeft();
-  //     delay(80);
-  //   }
-  //   else if ((sensorValues[3] < 900) && (sensorValues[4] < 900))
-  //   {
-  //     moveForward();
-  //     delay(120);
-  //   }
-  // }
-
-  // if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900)) {
-  //   moveBackward();
-  //   delay(80);
-  // } else {
-  //   moveForward();
-  //   delay(100);
-  //   if((sensorValues[1] < 900) && (sensorValues[2] < 900) && (sensorValues[3] < 900) && (sensorValues[4] > 900) && (sensorValues[5] > 900) && (sensorValues[6] > 900))
-  //   {
-  //     turnRight();
-  //     delay(80);
-  //   } 
-  //   else if((sensorValues[1] > 900) && (sensorValues[2] > 900) && (sensorValues[3] > 900) && (sensorValues[4] < 900) && (sensorValues[5] < 900) && (sensorValues[6] < 900)) {
-  //     turnLeft();
-  //     delay(80);
-  //   }
-  //   else if ((sensorValues[3] < 900) && (sensorValues[4] < 900))
-  //   {
-  //     moveForward();
-  //     delay(120);
-  //   }
-  // }
-
-  // if(((sensorValues[2] < 900) && (sensorValues[3] < 900))) {
-  //  moveForward();
-  // }
-  // else {
-  //  turnRight();
-  //  delay(200);
-  // }
-
-
-  //moveForward();
-  //delay(20);
-  //turnRight();
-  //turnLeft(180);
+if(((sensorValues[2] + sensorValues[3]) / 2) < ((sensorValues[0] + sensorValues[5]) / 2)) {
+  moveForward();
+}
+else if(((sensorValues[5] + sensorValues[4]) / 2 ) > ((sensorValues[0] + sensorValues[1]) / 2)) {
+  turnLeft();
+}
+else if(((sensorValues[4] + sensorValues[5]) / 2) < ((sensorValues[0] + sensorValues[1]) / 2)) {
+  turnRight();
+}
+else {
+  moveBackward();
 }
 
-/*void readSensors() {
-  uint16_t sensors[6];
-  uint16_t position = qtr.readLineWhite(sensors);
-
-  if((sensors[0] > 750) && (sensors[1] > 750) && (sensors[2] > 750) && (sensors[3] > 750) && (sensors[4] > 750) && (sensors[5] > 750)) {
-    moveBackward();
-  }
-
-  int16_t error = position - 1000;
-
-  if(error < -500) {
+/* if(((sensorValues[2]+sensorValues[3])/2)-((sensorValues[0] -sensorValues[5])/2) <=- static_cast<uint16_t>(105)){
+  moveForward();
+}
+  else if (((sensorValues[5] -sensorValues[4])/2)-((sensorValues[0]+sensorValues[1])/2) <= static_cast<uint16_t> (100)) {
     turnLeft();
   }
-  else if(error > 500) {
+  else if (((sensorValues[4]+sensorValues[5])/2)-((sensorValues[0] -sensorValues[1])/2) <=- static_cast<uint16_t> (100)) {
     turnRight();
   }
   else {
-    moveForward();
+    moveBackward();
   }
-
-}
 */
-
-void moveForward() {
+/*
+  if ((1000-(sensorValues[2]+sensoerValues[3])/2)-(1000-(sensorValues[0]- sensorValues[5])*1.5)>0)
+	moveForward();
+  */ 
+}
+void moveForward() 
+{
+  leftMotor.setSpeed(255);
+  rightMotor.setSpeed(255);
   rightMotor.run(FORWARD);
   leftMotor.run(FORWARD);
 }
 
 void moveBackward() {
+  leftMotor.setSpeed(255);
+  rightMotor.setSpeed(255);
   rightMotor.run(BACKWARD);
   leftMotor.run(BACKWARD);
   }
@@ -179,16 +139,21 @@ void stop(AF_DCMotor motor) {
 }
 
 void stop() {
+
   leftMotor.run(RELEASE);
   rightMotor.run(RELEASE);
 }
 
 void turnLeft() {
+  leftMotor.setSpeed(225);
+  rightMotor.setSpeed(225);
   leftMotor.run(FORWARD);
   rightMotor.run(BACKWARD);
 }
 
 void turnRight() {
+  leftMotor.setSpeed(225);
+  rightMotor.setSpeed(225);
   rightMotor.run(FORWARD);
   leftMotor.run(BACKWARD);
 }
